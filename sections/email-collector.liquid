@@ -1,0 +1,74 @@
+{{ 'section-email-collector.css' | asset_url | stylesheet_tag }}
+
+<section class="email is-anim" data-section-id="{{ section.id }}">
+  <div class="email__intro reveal">
+    {%- if section.settings.title != blank -%}
+      <h2 class="email__title type-xl">{{ section.settings.title | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.subcopy != blank -%}
+      <div class="type-md">{{ section.settings.subcopy }}</div>
+    {%- endif -%}
+  </div>
+
+{%- assign form_id = 'ContactNewsletter-' | append: section.id -%}
+{%- assign status_id = 'EmailStatus-' | append: section.id -%}
+  {% form 'customer', id: form_id, novalidate: 'novalidate', class: 'email__form reveal' %}
+    <input type="hidden" name="contact[tags]" value="newsletter">
+    <div>
+      <label class="visually-hidden" for="Email-{{ section.id }}">{{ 'general.newsletter_form.email_label' | t }}</label>
+      <input
+        id="Email-{{ section.id }}"
+        class="email__input"
+        type="email"
+        name="contact[email]"
+        value="{{ form.email }}"
+        placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+        aria-required="true"
+        aria-describedby="{{ status_id }}"
+        {% if form.errors %}aria-invalid="true"{% endif %}
+        required
+      >
+    </div>
+    <button type="submit" class="email__btn tt-min">
+      {{ section.settings.button_label | default: 'Notify me' | escape }}
+    </button>
+    <div id="{{ status_id }}" class="email__status type-sm" aria-live="polite" role="status">
+      {%- if form.posted_successfully? -%}
+        <p>{{ 'general.newsletter_form.confirmation' | t }}</p>
+      {%- elsif form.errors -%}
+        <div class="email__status-error">{{ form.errors | default_errors }}</div>
+      {%- endif -%}
+    </div>
+  {% endform %}
+</section>
+
+{% schema %}
+{
+  "name": "Email Collector",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Stay in the loop"
+    },
+    {
+      "type": "richtext",
+      "id": "subcopy",
+      "label": "Subcopy"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Notify me"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Email Collector",
+      "category": "Email"
+    }
+  ]
+}
+{% endschema %}

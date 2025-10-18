@@ -1,0 +1,18 @@
+{% if settings.announce_text != blank %}
+  <div class="announce" role="region" aria-label="Site announcement"{% if settings.announce_dismiss %} data-dismiss="announcement"{% endif %}>
+    <div class="announce__inner container">
+      {% if settings.announce_url != blank %}
+        <a href="{{ settings.announce_url }}" class="announce__link hover-dim tt-min tt-pad">
+          {{ settings.announce_text | escape }}
+        </a>
+      {% else %}
+        <span class="announce__text type-sm">{{ settings.announce_text | escape }}</span>
+      {% endif %}
+      {% if settings.announce_dismiss %}
+        <button type="button" class="announce__dismiss icon-btn hover-dim" data-announce-dismiss aria-label="{{ 'accessibility.close' | t }}">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      {% endif %}
+    </div>
+  </div>
+{% endif %}

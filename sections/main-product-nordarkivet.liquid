@@ -1,0 +1,318 @@
+{%- liquid
+  assign product_form_id = 'product-form-' | append: section.id
+  if product.selected_or_first_available_variant.featured_media
+    assign featured_media = product.selected_or_first_available_variant.featured_media
+  else
+    assign featured_media = product.featured_media
+  endif
+-%}
+<product-info
+  id="MainProduct-{{ section.id }}"
+  class="section section-{{ section.id }} pdp-wrapper"
+  data-section="{{ section.id }}"
+  data-product-id="{{ product.id }}"
+  data-update-url="true"
+  data-url="{{ product.url }}"
+>
+  {{ 'section-product-nordarkivet.css' | asset_url | stylesheet_tag }}
+  {{ 'component-price.css' | asset_url | stylesheet_tag }}
+  {{ 'component-accordion.css' | asset_url | stylesheet_tag }}
+  <script src="{{ 'product-info.js' | asset_url }}" defer="defer"></script>
+  <script src="{{ 'product-form.js' | asset_url }}" defer="defer"></script>
+
+  <div class="pdp is-anim">
+    <div class="pdp__grid">
+      <div class="pdp__gallery reveal" data-media-gallery>
+        {%- if featured_media -%}
+          {%- render 'pdp-media-item', media: featured_media, eager: true, section_id: section.id, product: product -%}
+        {%- endif -%}
+        {%- for media in product.media -%}
+          {%- if featured_media and media.id == featured_media.id -%}
+            {%- continue -%}
+          {%- endif -%}
+          {%- render 'pdp-media-item', media: media, eager: false, section_id: section.id, product: product -%}
+        {%- endfor -%}
+      </div>
+      <div class="pdp__content reveal">
+        <div class="pdp__header">
+          {%- if section.settings.kicker != blank -%}
+            <p class="kicker type-sm">{{ section.settings.kicker }}</p>
+          {%- endif -%}
+          <h1 class="type-xxl">{{ product.title | escape }}</h1>
+          {%- if section.settings.show_vendor and product.vendor != blank -%}
+            <p class="type-sm">{{ product.vendor | escape }}</p>
+          {%- endif -%}
+          <div id="price-{{ section.id }}" class="pdp__price" role="status">
+            {%- render 'price', product: product, use_variant: true, show_badges: false -%}
+          </div>
+        </div>
+        <div class="pdp__divider"></div>
+        {% render 'scarcity-bar', product: product %}
+        <div class="pdp__purchase">
+          <div class="pdp__form-controls">
+            {%- unless product.has_only_default_variant -%}
+              <variant-selects
+                id="variant-selects-{{ section.id }}"
+                class="variant-selects"
+                data-section="{{ section.id }}"
+              >
+                {%- for option in product.options_with_values -%}
+                  <div class="product-form__input product-form__input--dropdown">
+                    <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">{{ option.name }}</label>
+                    <div class="select">
+                      <select
+                        id="Option-{{ section.id }}-{{ forloop.index0 }}"
+                        class="select__select"
+                        name="options[{{ option.name | escape }}]"
+                        form="{{ product_form_id }}"
+                      >
+                        {%- for value in option.values -%}
+                          <option
+                            value="{{ value | escape }}"
+                            {% if value.selected %}selected="selected"{% endif %}
+                            {% if value.available %}
+                              data-product-url="{{ value.product_url }}"
+                            {% endif %}
+                            data-option-value-id="{{ value.id }}"
+                          >
+                            {%- if value.available -%}
+                              {{- value -}}
+                            {%- else -%}
+                              {{- 'products.product.value_unavailable' | t: option_value: value -}}
+                            {%- endif -%}
+                          </option>
+                        {%- endfor -%}
+                      </select>
+                      <span class="svg-wrapper">{{ 'icon-caret.svg' | inline_asset_content }}</span>
+                    </div>
+                  </div>
+                {%- endfor -%}
+                <script type="application/json" data-selected-variant>
+                  {{ product.selected_or_first_available_variant | json }}
+                </script>
+              </variant-selects>
+            {%- endunless -%}
+            <div
+              id="Quantity-Form-{{ section.id }}"
+              class="product-form__input product-form__quantity"
+            >
+              {%- assign cart_qty = cart | item_count_for_variant: product.selected_or_first_available_variant.id -%}
+              <span class="visually-hidden" id="quantity-label-{{ section.id }}">
+                {%- if cart_qty > 0 -%}
+                  {{- 'products.product.quantity.in_cart_aria_label' | t: quantity: cart_qty -}}
+                {%- else -%}
+                  {{- 'products.product.quantity.label' | t -}}
+                {%- endif -%}
+              </span>
+              <label
+                class="quantity__label form__label"
+                for="Quantity-{{ section.id }}"
+                aria-labelledby="quantity-label-{{ section.id }}"
+              >
+                <span aria-hidden="true">{{ 'products.product.quantity.label' | t }}</span>
+                <span class="quantity__rules-cart{% if cart_qty == 0 %} hidden{% endif %}" aria-hidden="true">
+                  {%- render 'loading-spinner' -%}
+                  <span>({{ 'products.product.quantity.in_cart_html' | t: quantity: cart_qty }})</span>
+                </span>
+              </label>
+              <div class="price-per-item__container">
+                <quantity-input class="quantity">
+                  <button class="quantity__button icon-btn" name="minus" type="button">
+                    <span class="visually-hidden">
+                      {{- 'products.product.quantity.decrease' | t: product: product.title | escape -}}
+                    </span>
+                    <span class="svg-wrapper">{{ 'icon-minus.svg' | inline_asset_content }}</span>
+                  </button>
+                  <input
+                    class="quantity__input"
+                    type="number"
+                    name="quantity"
+                    id="Quantity-{{ section.id }}"
+                    data-cart-quantity="{{ cart_qty }}"
+                    data-min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                    min="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                    {% if product.selected_or_first_available_variant.quantity_rule.max != null %}
+                      data-max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
+                      max="{{ product.selected_or_first_available_variant.quantity_rule.max }}"
+                    {% endif %}
+                    step="{{ product.selected_or_first_available_variant.quantity_rule.increment }}"
+                    value="{{ product.selected_or_first_available_variant.quantity_rule.min }}"
+                  >
+                  <button class="quantity__button icon-btn" name="plus" type="button">
+                    <span class="visually-hidden">
+                      {{- 'products.product.quantity.increase' | t: product: product.title | escape -}}
+                    </span>
+                    <span class="svg-wrapper">{{ 'icon-plus.svg' | inline_asset_content }}</span>
+                  </button>
+                </quantity-input>
+                <div class="quantity__rules hidden" id="Quantity-Rules-{{ section.id }}"></div>
+                <div class="price-per-item hidden" id="Price-Per-Item-{{ section.id }}"></div>
+              </div>
+            </div>
+          </div>
+          <product-form class="product-form" data-section-id="{{ section.id }}">
+            <div class="product-form__error-message-wrapper" role="alert" hidden>
+              <span class="svg-wrapper">{{- 'icon-error.svg' | inline_asset_content -}}</span>
+              <span class="product-form__error-message"></span>
+            </div>
+            {%- form 'product', product, id: product_form_id, class: 'form', novalidate: 'novalidate', data-type: 'add-to-cart-form' -%}
+              <input
+                type="hidden"
+                name="id"
+                value="{{ product.selected_or_first_available_variant.id }}"
+                class="product-variant-id"
+                {% if product.selected_or_first_available_variant.available == false or product.selected_or_first_available_variant == null %}
+                  disabled
+                {% endif %}
+              >
+              <div class="product-form__buttons">
+                <button
+                  id="ProductSubmitButton-{{ section.id }}"
+                  type="submit"
+                  name="add"
+                  class="product-form__submit button button--full-width tt-min tt-pad"
+                  {% if product.selected_or_first_available_variant.available == false or product.selected_or_first_available_variant == null %}
+                    disabled
+                  {% endif %}
+                >
+                  <span>
+                    {%- if product.selected_or_first_available_variant == null -%}
+                      {{ 'products.product.unavailable' | t }}
+                    {%- elsif product.selected_or_first_available_variant.available == false -%}
+                      {{ 'products.product.sold_out' | t }}
+                    {%- else -%}
+                      {{ 'products.product.add_to_cart' | t }}
+                    {%- endif -%}
+                  </span>
+                  {%- render 'loading-spinner' -%}
+                </button>
+                {%- if section.settings.show_dynamic_checkout -%}
+                  {{ form | payment_button }}
+                {%- endif -%}
+              </div>
+            {%- endform -%}
+          </product-form>
+          {%- if section.settings.show_pickup_availability and product.selected_or_first_available_variant.store_availabilities.size > 0 -%}
+            {{ 'component-pickup-availability.css' | asset_url | stylesheet_tag }}
+            <pickup-availability
+              class="product__pickup-availabilities"
+              {% if product.selected_or_first_available_variant.available and product.selected_or_first_available_variant.store_availabilities.first.pick_up_enabled %}
+                available
+              {% endif %}
+              data-root-url="{{ routes.root_url }}"
+              data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+              data-product-page-color-scheme="color-{{ settings.color_scheme }}"
+              data-section-id="{{ section.id }}"
+            >
+              <template>
+                <pickup-availability-preview class="pickup-availability-preview">
+                  <span class="svg-wrapper">{{- 'icon-unavailable.svg' | inline_asset_content -}}</span>
+                  <div class="pickup-availability-info">
+                    <p class="caption-large">{{ 'products.product.pickup_availability.unavailable' | t }}</p>
+                    <button class="pickup-availability-button link link--text underlined-link">
+                      {{ 'products.product.pickup_availability.refresh' | t }}
+                    </button>
+                  </div>
+                </pickup-availability-preview>
+              </template>
+            </pickup-availability>
+            <script src="{{ 'pickup-availability.js' | asset_url }}" defer="defer"></script>
+          {%- endif -%}
+        </div>
+        {%- liquid
+          assign story_metafield = product.metafields.nordarkivet.story
+          if story_metafield == blank
+            assign story_metafield = product.metafields['nordarkivet.story']
+          endif
+          if story_metafield != blank
+            assign story_content = story_metafield | metafield_tag
+          elsif product.description != blank
+            assign story_excerpt = product.description | strip_html | truncatewords: 80, '…'
+            assign story_content = '<p>' | append: story_excerpt | append: '</p>'
+          endif
+        -%}
+        {%- if story_content != blank -%}
+          <div class="pdp__story">
+            <h2 class="type-lg">{{ section.settings.story_heading | default: 'Story' }}</h2>
+            <div class="rte">{{ story_content }}</div>
+          </div>
+        {%- endif -%}
+        {% render 'texture-detail', product: product %}
+        {% render 'pdp-accordion', details: section.settings.details, shipping: section.settings.shipping, returns: section.settings.returns %}
+      </div>
+    </div>
+  </div>
+
+  {%- if product.media.size > 0 -%}
+    <script src="{{ 'product-modal.js' | asset_url }}" defer="defer"></script>
+  {%- endif -%}
+  {%- assign first_3d_model = product.media | where: 'media_type', 'model' | first -%}
+  {%- if first_3d_model -%}
+    <script type="application/json" id="ProductJSON-{{ product.id }}">
+      {{ product.media | where: 'media_type', 'model' | json }}
+    </script>
+    <script src="{{ 'product-model.js' | asset_url }}" defer></script>
+  {%- endif -%}
+  <script type="application/ld+json">
+    {{ product | structured_data }}
+  </script>
+</product-info>
+
+{% schema %}
+{
+  "name": "Nordarkivet — Cinematic PDP",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "kicker",
+      "label": "Kicker"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_vendor",
+      "label": "Show vendor",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_dynamic_checkout",
+      "label": "Show dynamic checkout buttons",
+      "default": false
+    },
+    {
+      "type": "checkbox",
+      "id": "show_pickup_availability",
+      "label": "Show pickup availability",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "story_heading",
+      "label": "Story heading",
+      "default": "Story"
+    },
+    {
+      "type": "richtext",
+      "id": "details",
+      "label": "Details"
+    },
+    {
+      "type": "richtext",
+      "id": "shipping",
+      "label": "Shipping"
+    },
+    {
+      "type": "richtext",
+      "id": "returns",
+      "label": "Returns"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Nordarkivet — Cinematic PDP"
+    }
+  ]
+}
+{% endschema %}

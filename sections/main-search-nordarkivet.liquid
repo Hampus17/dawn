@@ -1,0 +1,102 @@
+{{ 'section-search.css' | asset_url | stylesheet_tag }}
+
+<section class="section search is-anim" data-section-id="{{ section.id }}">
+  <header class="search__header reveal">
+    <h1 class="type-xl">{{ 'general.search.search' | t }}</h1>
+  </header>
+  <form action="{{ routes.search_url }}" method="get" role="search" class="search__form reveal" aria-label="Site search">
+    <label class="visually-hidden" for="SearchInput-{{ section.id }}">{{ 'general.search.search' | t }}</label>
+    <input
+      id="SearchInput-{{ section.id }}"
+      type="search"
+      name="q"
+      value="{{ search.terms | escape }}"
+      placeholder="{{ 'general.search.search' | t }}"
+      class="tt-pad tt-min"
+      required
+    >
+    <button type="submit" class="button button--primary tt-min tt-pad hover-dim">{{ 'general.search.submit' | t }}</button>
+  </form>
+  {% if search.performed %}
+    <div class="search__meta type-sm reveal">
+      <span>
+        {{ 'templates.search.results_with_count' | t: terms: search.terms, count: search.results_count }}
+      </span>
+    </div>
+    {% paginate search.results by 24 %}
+      {% if search.results_count > 0 %}
+        <div class="search__grid">
+          {%- assign skip_card_product_styles = false -%}
+          {%- for item in search.results -%}
+            {%- assign lazy_load = true -%}
+            {%- if paginate.current_page == 1 and forloop.index0 < 2 -%}
+              {%- assign lazy_load = false -%}
+            {%- endif -%}
+            <div class="search__card reveal">
+              {%- case item.object_type -%}
+                {%- when 'product' -%}
+                  {% render 'card-product',
+                    card_product: item,
+                    media_aspect_ratio: 'portrait',
+                    show_secondary_image: true,
+                    lazy_load: lazy_load,
+                    skip_styles: skip_card_product_styles,
+                    section_id: section.id
+                  %}
+                  {%- assign skip_card_product_styles = true -%}
+                {%- when 'article' -%}
+                  {% render 'article-card',
+                    article: item,
+                    show_image: true,
+                    show_date: false,
+                    show_author: false,
+                    show_badge: true,
+                    media_aspect_ratio: 1,
+                    lazy_load: lazy_load
+                  %}
+                {%- when 'page' -%}
+                  <div class="article-card-wrapper card-wrapper underline-links-hover">
+                    <div class="card card--card card--text ratio" style="--ratio-percent: 100%;">
+                      <div class="card__content">
+                        <div class="card__information">
+                          <h3 class="card__heading">
+                            <a href="{{ item.url }}" class="full-unstyled-link">{{ item.title | truncate: 64 | escape }}</a>
+                          </h3>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+              {%- endcase -%}
+            </div>
+          {%- endfor -%}
+        </div>
+        {% if paginate.pages > 1 %}
+          {% render 'pagination', paginate: paginate %}
+        {% endif %}
+      {% else %}
+        <div class="search__empty reveal">
+          <p class="type-md">{{ 'templates.search.no_results' | t: terms: search.terms }}</p>
+          <a href="{{ routes.all_products_collection_url }}" class="button button--secondary tt-min tt-pad">
+            {{ 'general.continue_shopping' | t }}
+          </a>
+        </div>
+      {% endif %}
+    {% endpaginate %}
+  {% else %}
+    <div class="search__meta type-sm reveal">
+      <span>{{ 'templates.search.title' | t }}</span>
+    </div>
+  {% endif %}
+</section>
+
+{% schema %}
+{
+  "name": "Search — Nordarkivet",
+  "settings": [],
+  "presets": [
+    {
+      "name": "Search — Nordarkivet"
+    }
+  ]
+}
+{% endschema %}

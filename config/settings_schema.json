@@ -102,6 +102,155 @@
     ]
   },
   {
+    "name": "Design",
+    "settings": [
+      {
+        "type": "font_picker",
+        "id": "theme_font_primary",
+        "default": "assistant_n4",
+        "label": "Primary font"
+      },
+      {
+        "type": "font_picker",
+        "id": "theme_font_secondary",
+        "default": "assistant_n7",
+        "label": "Secondary font"
+      },
+      {
+        "type": "color",
+        "id": "theme_color_bg",
+        "default": "#f7f2eb",
+        "label": "Background color"
+      },
+      {
+        "type": "color",
+        "id": "theme_color_text",
+        "default": "#2f2a26",
+        "label": "Text color"
+      },
+      {
+        "type": "color",
+        "id": "theme_color_muted",
+        "default": "#6e655d",
+        "label": "Muted color"
+      },
+      {
+        "type": "color",
+        "id": "theme_color_border",
+        "default": "#d9cfc4",
+        "label": "Border color"
+      },
+      {
+        "type": "color",
+        "id": "theme_color_accent_1",
+        "default": "#c47b5f",
+        "label": "Accent color 1"
+      },
+      {
+        "type": "color",
+        "id": "theme_color_accent_2",
+        "default": "#7c8f7a",
+        "label": "Accent color 2"
+      },
+      {
+        "type": "select",
+        "id": "theme_spacing_scale",
+        "options": [
+          {
+            "value": "xs",
+            "label": "Extra small"
+          },
+          {
+            "value": "sm",
+            "label": "Small"
+          },
+          {
+            "value": "md",
+            "label": "Medium"
+          },
+          {
+            "value": "lg",
+            "label": "Large"
+          },
+          {
+            "value": "xl",
+            "label": "Extra large"
+          }
+        ],
+        "default": "md",
+        "label": "Spacing scale"
+      },
+      {
+        "type": "header",
+        "content": "Typography"
+      },
+      {
+        "type": "range",
+        "id": "type_scale",
+        "label": "Type scale multiplier",
+        "min": 0.9,
+        "max": 1.2,
+        "step": 0.05,
+        "default": 1
+      },
+      {
+        "type": "select",
+        "id": "heading_weight",
+        "label": "Heading weight",
+        "options": [
+          {
+            "value": "300",
+            "label": "Light (300)"
+          },
+          {
+            "value": "400",
+            "label": "Regular (400)"
+          },
+          {
+            "value": "500",
+            "label": "Medium (500)"
+          }
+        ],
+        "default": "400"
+      },
+      {
+        "type": "checkbox",
+        "id": "enable_kicker_uppercase",
+        "label": "Uppercase kicker",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Header",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "announce_enable",
+        "label": "Enable announcement bar",
+        "default": false
+      },
+      {
+        "type": "text",
+        "id": "announce_text",
+        "label": "Announcement text",
+        "default": ""
+      },
+      {
+        "type": "url",
+        "id": "announce_url",
+        "label": "Optional link",
+        "default": ""
+      },
+      {
+        "type": "checkbox",
+        "id": "announce_dismiss",
+        "label": "Allow dismiss",
+        "default": false
+      }
+    ]
+  },
+  {
     "name": "t:settings_schema.typography.name",
     "settings": [
       {

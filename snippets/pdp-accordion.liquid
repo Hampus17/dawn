@@ -1,0 +1,20 @@
+<div class="pdp__accordion">
+  {%- if details != blank -%}
+    <details>
+      <summary>Details</summary>
+      <div class="pdp__accordion-content rte">{{ details }}</div>
+    </details>
+  {%- endif -%}
+  {%- if shipping != blank -%}
+    <details>
+      <summary>Shipping</summary>
+      <div class="pdp__accordion-content rte">{{ shipping }}</div>
+    </details>
+  {%- endif -%}
+  {%- if returns != blank -%}
+    <details>
+      <summary>Returns</summary>
+      <div class="pdp__accordion-content rte">{{ returns }}</div>
+    </details>
+  {%- endif -%}
+</div>

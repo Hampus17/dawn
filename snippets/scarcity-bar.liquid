@@ -1,0 +1,19 @@
+{%- liquid
+  assign scarcity_metafield = product.metafields.nordarkivet.scarcity_label
+  if scarcity_metafield != blank
+    assign scarcity_text = scarcity_metafield.value | default: scarcity_metafield
+  endif
+
+  assign variant = product.selected_or_first_available_variant
+  if scarcity_text == blank and variant != nil and variant.inventory_management and variant.inventory_policy != 'continue'
+    if variant.inventory_quantity and variant.inventory_quantity > 0 and variant.inventory_quantity <= 12
+      assign scarcity_text = 'Only ' | append: variant.inventory_quantity | append: ' left'
+    endif
+  endif
+-%}
+{%- if scarcity_text != blank -%}
+  <div class="scarcity" role="status">
+    <span class="scarcity__icon" aria-hidden="true">⏳</span>
+    <span>{{ scarcity_text }}</span>
+  </div>
+{%- endif -%}

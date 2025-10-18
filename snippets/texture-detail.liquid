@@ -1,0 +1,18 @@
+{%- assign texture_image = product.metafields.nordarkivet.texture_image -%}
+{%- if texture_image == blank -%}
+  {%- assign texture_image = product.metafields["nordarkivet.texture_image"] -%}
+{%- endif -%}
+{%- if texture_image != blank -%}
+  {%- assign caption_metafield = product.metafields.nordarkivet.texture_caption -%}
+  {%- if caption_metafield == blank -%}
+    {%- assign caption_metafield = product.metafields["nordarkivet.texture_caption"] -%}
+  {%- endif -%}
+  {%- assign caption_text = caption_metafield.value | default: caption_metafield -%}
+  {%- assign alt_text = caption_text | default: product.title -%}
+  <div class="texture">
+    {{ texture_image | image_url: width: 900 | image_tag: class: 'texture__img', loading: 'lazy', decoding: 'async', sizes: '(min-width: 992px) 360px, 100vw', widths: '360,540,720,900', alt: alt_text }}
+    {%- if caption_text != blank -%}
+      <p class="texture__caption type-sm">{{ caption_text }}</p>
+    {%- endif -%}
+  </div>
+{%- endif -%}

@@ -1,0 +1,55 @@
+@import url('./tokens.css');
+
+.notfound {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--space-8);
+  text-align: center;
+  display: grid;
+  place-items: center;
+}
+
+.notfound__inner {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.notfound__title {
+  margin: 0 0 var(--space-3);
+}
+
+.notfound__copy {
+  margin: 0;
+}
+
+.notfound__search {
+  display: flex;
+  gap: var(--space-3);
+  justify-content: center;
+}
+
+.notfound__input {
+  flex: 1;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  background: var(--color-surface, var(--color-bg));
+}
+
+.notfound__cta {
+  display: flex;
+  justify-content: center;
+}
+
+@media (max-width: 640px) {
+  .notfound {
+    padding: var(--space-6);
+  }
+
+  .notfound__search {
+    flex-direction: column;
+  }
+
+  .notfound__input {
+    width: 100%;
+  }
+}

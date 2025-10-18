@@ -1,0 +1,27 @@
+{%- liquid
+  assign display_fallback = 'ui-serif, Georgia, Times, "Times New Roman", serif'
+  assign body_fallback = 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif'
+  assign kicker_transform = 'uppercase'
+  if settings.enable_kicker_uppercase == false
+    assign kicker_transform = 'none'
+  endif
+  assign type_scale_value = settings.type_scale | default: 1
+  if type_scale_value == blank
+    assign type_scale_value = 1
+  endif
+  assign heading_weight_value = settings.heading_weight | default: '400'
+  if heading_weight_value == blank
+    assign heading_weight_value = '400'
+  endif
+-%}
+{{ settings.theme_font_primary | font_face: font_display: 'swap' }}
+{{ settings.theme_font_secondary | font_face: font_display: 'swap' }}
+<style>
+  :root{
+    --font-display: {{ settings.theme_font_primary.family | default: display_fallback | json }};
+    --font-body: {{ settings.theme_font_secondary.family | default: body_fallback | json }};
+    --type-scale: {{ type_scale_value }};
+    --heading-weight: {{ heading_weight_value }};
+    --kicker-transform: {{ kicker_transform }};
+  }
+</style>
