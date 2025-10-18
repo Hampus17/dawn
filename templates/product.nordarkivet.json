@@ -1,0 +1,20 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product-nordarkivet",
+      "settings": {
+        "kicker": "",
+        "show_vendor": false,
+        "show_dynamic_checkout": false,
+        "show_pickup_availability": false,
+        "story_heading": "Story",
+        "details": "<p>Archival pigment print on museum-grade stock. Edition includes certificate.</p>",
+        "shipping": "<p>Ships worldwide from our Copenhagen atelier within 5 business days.</p>",
+        "returns": "<p>Returns accepted within 14 days in original packaging.</p>"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
+}

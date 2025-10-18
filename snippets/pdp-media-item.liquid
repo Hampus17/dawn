@@ -1,0 +1,19 @@
+{%- assign is_eager = eager | default: false -%}
+{%- assign loading_attr = is_eager and request.design_mode == false ? 'eager' : 'lazy' -%}
+{%- assign decoding_attr = is_eager ? 'auto' : 'async' -%}
+{%- assign preview_image = media.preview_image -%}
+{%- assign alt_text = media.alt | default: product.title | escape -%}
+<figure class="pdp__media" data-media-type="{{ media.media_type }}">
+  {%- case media.media_type -%}
+    {%- when 'image' -%}
+      {{ preview_image | image_url: width: 2000 | image_tag: class: 'pdp__img', loading: loading_attr, decoding: decoding_attr, sizes: '(min-width: 992px) calc(50vw - 4rem)', widths: '480,720,960,1200,1600,2000', alt: alt_text }}
+    {%- when 'video' -%}
+      {{ media | media_tag: image_size: '2048x', autoplay: false, controls: true, loop: false, preload: 'metadata' }}
+    {%- when 'external_video' -%}
+      {{ media | external_video_url: autoplay: false, loop: false | external_video_tag: class: 'pdp__video' }}
+    {%- when 'model' -%}
+      {{ media | media_tag: image_size: '2048x', toggleable: true }}
+    {%- else -%}
+      {{ media | media_tag }}
+  {%- endcase -%}
+</figure>

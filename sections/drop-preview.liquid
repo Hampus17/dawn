@@ -1,0 +1,111 @@
+{{ 'section-drop-preview.css' | asset_url | stylesheet_tag }}
+
+<section class="drop is-anim" data-section-id="{{ section.id }}">
+  <div class="drop__grid">
+    {%- for block in section.blocks -%}
+      {%- assign block_title = block.settings.title | default: 'Drop' -%}
+      <article class="drop__card reveal" {{ block.shopify_attributes }}>
+        {%- if block.settings.url != blank -%}
+          <a href="{{ block.settings.url }}" class="drop__link tt-min tt-pad" aria-label="View details for {{ block_title | escape }}">
+        {%- endif -%}
+            <div class="drop__image">
+              {%- if block.settings.date_label != blank -%}
+                <span class="drop__badge type-sm">{{ block.settings.date_label | escape }}</span>
+              {%- endif -%}
+              {%- if block.settings.image_primary != blank -%}
+                <img
+                  class="drop__img drop__img--primary"
+                  src="{{ block.settings.image_primary | image_url: width: 900 }}"
+                  srcset="{{ block.settings.image_primary | image_url: width: 600 }} 600w, {{ block.settings.image_primary | image_url: width: 900 }} 900w, {{ block.settings.image_primary | image_url: width: 1200 }} 1200w"
+                  sizes="(min-width: 1200px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  alt="{{ block.settings.image_primary.alt | default: block_title | escape }}"
+                  loading="{% if forloop.first %}eager{% else %}lazy{% endif %}"
+                  fetchpriority="{% if forloop.first %}high{% else %}auto{% endif %}"
+                  decoding="{% if forloop.first %}auto{% else %}async{% endif %}"
+                >
+              {%- else -%}
+                {{ 'collection-1' | placeholder_svg_tag: 'placeholder-svg' }}
+              {%- endif -%}
+              {%- if block.settings.image_hover != blank -%}
+                <img
+                  class="drop__img drop__img--hover"
+                  src="{{ block.settings.image_hover | image_url: width: 900 }}"
+                  srcset="{{ block.settings.image_hover | image_url: width: 600 }} 600w, {{ block.settings.image_hover | image_url: width: 900 }} 900w, {{ block.settings.image_hover | image_url: width: 1200 }} 1200w"
+                  sizes="(min-width: 1200px) 33vw, (min-width: 640px) 50vw, 100vw"
+                  alt=""
+                  role="presentation"
+                  aria-hidden="true"
+                  loading="lazy"
+                  decoding="async"
+                >
+              {%- endif -%}
+            </div>
+            <div class="drop__content">
+              {%- if block.settings.title != blank -%}
+                <h3 class="drop__title type-lg">{{ block_title | escape }}</h3>
+              {%- endif -%}
+            </div>
+        {%- if block.settings.url != blank -%}
+          </a>
+        {%- endif -%}
+      </article>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Drop Preview",
+  "blocks": [
+    {
+      "type": "drop",
+      "name": "Drop",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_primary",
+          "label": "Primary image"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_hover",
+          "label": "Hover image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "date_label",
+          "label": "Date badge"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 12,
+  "presets": [
+    {
+      "name": "Drop Preview",
+      "category": "Editorial",
+      "blocks": [
+        {
+          "type": "drop"
+        },
+        {
+          "type": "drop"
+        },
+        {
+          "type": "drop"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,122 @@
+{{ 'section-editorial-row.css' | asset_url | stylesheet_tag }}
+
+{%- liquid
+  assign columns = section.settings.columns | default: '3'
+  assign reverse_desktop = section.settings.reverse_on_desktop
+-%}
+
+<section class="editorial is-anim" data-section-id="{{ section.id }}">
+  <div class="editorial__grid" data-columns="{{ columns }}" data-reverse="{{ reverse_desktop }}">
+    {%- for block in section.blocks -%}
+      <article class="editorial__item reveal" {{ block.shopify_attributes }}>
+        {%- if block.settings.image != blank -%}
+          <div class="editorial__img-wrapper">
+            <img
+              class="editorial__img"
+              src="{{ block.settings.image | image_url: width: 800 }}"
+              srcset="{{ block.settings.image | image_url: width: 400 }} 400w, {{ block.settings.image | image_url: width: 600 }} 600w, {{ block.settings.image | image_url: width: 800 }} 800w"
+              sizes="(max-width: 768px) 100vw, (min-width: 1200px) calc(100vw/{{ columns }}), 33vw"
+              alt="{{ block.settings.image.alt | default: block.settings.title | escape }}"
+              loading="lazy"
+              decoding="async"
+            >
+          </div>
+        {%- endif -%}
+        <div class="editorial__copy">
+          {%- if block.settings.title != blank -%}
+            <h3 class="type-lg">{{ block.settings.title | escape }}</h3>
+          {%- endif -%}
+          {%- if block.settings.text != blank -%}
+            <div class="type-md">{{ block.settings.text }}</div>
+          {%- endif -%}
+          {%- if block.settings.link_label != blank and block.settings.link_url != blank -%}
+            <a class="editorial__link type-sm tt-min tt-pad" href="{{ block.settings.link_url }}">
+              {{ block.settings.link_label | escape }}
+            </a>
+          {%- endif -%}
+        </div>
+      </article>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Editorial Row",
+  "settings": [
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Columns on desktop",
+      "default": "3",
+      "options": [
+        {
+          "value": "2",
+          "label": "Two"
+        },
+        {
+          "value": "3",
+          "label": "Three"
+        }
+      ]
+    },
+    {
+      "type": "checkbox",
+      "id": "reverse_on_desktop",
+      "label": "Reverse order on desktop",
+      "default": false
+    }
+  ],
+  "blocks": [
+    {
+      "type": "item",
+      "name": "Editorial item",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link label"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 6,
+  "presets": [
+    {
+      "name": "Editorial Row",
+      "category": "Editorial",
+      "blocks": [
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        },
+        {
+          "type": "item"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,67 @@
+{{ 'section-404.css' | asset_url | stylesheet_tag }}
+
+<section class="section notfound is-anim" data-section-id="{{ section.id }}">
+  <div class="notfound__inner reveal">
+    <div class="notfound__header">
+      <h1 class="notfound__title type-xl">{{ section.settings.title | default: 'Page not found' | escape }}</h1>
+      <div class="notfound__copy prose type-md">
+        {{ section.settings.copy | default: "<p>We can't find the page you're looking for. Try searching or head back home.</p>" }}
+      </div>
+    </div>
+    <form action="{{ routes.search_url }}" method="get" role="search" class="notfound__search" aria-label="Site search">
+      <label class="visually-hidden" for="Search404">{{ 'general.search.search' | t }}</label>
+      <input
+        id="Search404"
+        type="search"
+        name="q"
+        value=""
+        placeholder="{{ 'general.search.search' | t }}"
+        class="notfound__input tt-min tt-pad"
+        required
+      >
+      <button type="submit" class="button button--primary tt-min tt-pad hover-dim">{{ 'general.search.submit' | t }}</button>
+    </form>
+    <div class="notfound__cta">
+      <a href="{{ section.settings.cta_url | default: routes.root_url }}" class="button button--secondary tt-min tt-pad">
+        {{ section.settings.cta_label | default: 'Back to home' | escape }}
+      </a>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "404 — Calm message",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Heading",
+      "default": "We lost this page"
+    },
+    {
+      "type": "richtext",
+      "id": "copy",
+      "label": "Message",
+      "default": "<p>Double-check the URL, use the search below, or return to the home page.</p>"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Return home"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link",
+      "default": "/"
+    }
+  ],
+  "presets": [
+    {
+      "name": "404 — Gentle guidance"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,46 @@
+/* Base transitions */
+.is-anim a,
+.is-anim button,
+.is-anim [role="button"] {
+  transition: opacity var(--dur-quick) var(--ease-standard),
+    transform var(--dur-quick) var(--ease-standard);
+}
+
+/* Quiet hover */
+.hover-dim:hover {
+  opacity: 0.85;
+}
+
+/* Scroll reveal (CSS only; activation via .reveal-in) */
+.reveal {
+  opacity: 0;
+  transform: translateY(var(--space-2));
+}
+
+.reveal-in {
+  opacity: 1;
+  transform: none;
+  transition: opacity var(--dur-standard) var(--ease-standard),
+    transform var(--dur-standard) var(--ease-standard);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
+  }
+
+  .reveal-in {
+    transition: none;
+  }
+}

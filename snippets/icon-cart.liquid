@@ -1,0 +1,15 @@
+{%- liquid
+  assign icon_variant = icon | default: 'cart'
+  assign label_text = label | default: blank
+  assign asset_name = 'icon-cart.svg'
+  if icon_variant == 'empty' or icon_variant == 'cart-empty'
+    assign asset_name = 'icon-cart-empty.svg'
+  endif
+  assign svg_markup = asset_name | inline_asset_content | replace: '<svg', '<svg aria-hidden="true" focusable="false"'
+-%}
+<span class="svg-wrapper" aria-hidden="true">
+  {{- svg_markup -}}
+</span>
+{%- if label_text != blank -%}
+  <span class="visually-hidden">{{ label_text }}</span>
+{%- endif -%}

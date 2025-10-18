@@ -1,11 +1,9 @@
 {% if cart == empty %}
-  <span class="svg-wrapper">{{ 'icon-cart-empty.svg' | inline_asset_content }}</span>
+  {% render 'icon-cart', icon: 'empty', label: 'templates.cart.cart' | t %}
 {% else %}
-  <span class="svg-wrapper">{{ 'icon-cart.svg' | inline_asset_content }}</span>
+  {% render 'icon-cart', icon: 'cart', label: 'templates.cart.cart' | t %}
 {% endif %}
-
-<span class="visually-hidden">{{ 'templates.cart.cart' | t }}</span>
-{%- if cart != empty -%}
+  {%- if cart != empty -%}
   <div class="cart-count-bubble">
     {%- if cart.item_count < 100 -%}
       <span aria-hidden="true">{{ cart.item_count }}</span>

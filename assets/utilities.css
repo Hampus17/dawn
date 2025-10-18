@@ -1,0 +1,61 @@
+@import url('./tokens.css');
+
+.type-xxl {
+  font-size: clamp(calc(2.6rem * var(--type-scale)), 5vw, calc(4.2rem * var(--type-scale)));
+  line-height: 1.05;
+  font-family: var(--font-display);
+}
+
+.type-xl {
+  font-size: clamp(calc(1.8rem * var(--type-scale)), 3.2vw, calc(2.6rem * var(--type-scale)));
+  line-height: 1.15;
+  font-family: var(--font-display);
+}
+
+.type-lg {
+  font-size: calc(1.375rem * var(--type-scale));
+  line-height: 1.3;
+  font-family: var(--font-display);
+}
+
+.type-md {
+  font-size: 1rem;
+  line-height: 1.6;
+  font-family: var(--font-body);
+}
+
+.type-sm {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  font-family: var(--font-body);
+}
+
+.kicker {
+  letter-spacing: 0.08em;
+  text-transform: var(--kicker-transform);
+}
+
+.measure {
+  max-width: 68ch;
+}
+
+.pad-section {
+  padding-block: var(--space-8);
+  padding-inline: var(--space-5);
+}
+
+@media (min-width: 64rem) {
+  .pad-section {
+    padding-block: var(--space-9);
+    padding-inline: var(--space-8);
+  }
+}
+
+.gap-block {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.util-transition {
+  transition: all var(--dur-quick) var(--ease-standard);
+}

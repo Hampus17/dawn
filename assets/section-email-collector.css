@@ -1,0 +1,79 @@
+.email {
+  max-width: 50rem;
+  margin: 0 auto;
+  padding: var(--space-8) var(--space-4);
+  display: grid;
+  gap: var(--space-4);
+  text-align: center;
+}
+
+.email__title {
+  margin: 0;
+}
+
+.email__intro {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.email__form {
+  display: flex;
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.email__input {
+  flex: 1;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: border-color var(--dur-quick) var(--ease-standard), box-shadow var(--dur-quick) var(--ease-standard);
+}
+
+.email__input:focus-visible {
+  outline: 2px solid var(--color-text);
+  outline-offset: 3px;
+}
+
+.email__btn {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-1);
+  background: var(--color-surface);
+  color: var(--color-text);
+  transition: opacity var(--dur-quick) var(--ease-standard), transform var(--dur-quick) var(--ease-standard);
+}
+
+.email__btn:hover,
+.email__btn:focus-visible {
+  opacity: 0.85;
+}
+
+.email__status {
+  min-height: 1.5em;
+}
+
+@media (max-width: 640px) {
+  .email__form {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .email__btn {
+    width: 100%;
+  }
+}
+
+@media (min-width: 640px) {
+  .email {
+    padding: var(--space-8) var(--space-6);
+  }
+}
+
+@media (min-width: 992px) {
+  .email {
+    padding: var(--space-9) var(--space-7);
+  }
+}

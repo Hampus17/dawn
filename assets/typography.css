@@ -1,0 +1,103 @@
+@import url('./tokens.css');
+
+:root {
+  /* Defaults overridden by theme variables snippet */
+  --font-display: ui-serif, Georgia, Times, "Times New Roman", serif;
+  --font-body: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --type-scale: 1;
+  --heading-weight: 400;
+  --kicker-transform: uppercase;
+}
+
+html {
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--color-text);
+  background: var(--color-bg);
+  line-height: 1.6;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-display);
+  font-weight: var(--heading-weight);
+}
+
+.h1,
+.type-xxl {
+  font-size: clamp(calc(2.6rem * var(--type-scale)), 5vw, calc(4.2rem * var(--type-scale)));
+  line-height: 1.05;
+  font-family: var(--font-display);
+}
+
+.h2,
+.type-xl {
+  font-size: clamp(calc(1.8rem * var(--type-scale)), 3.2vw, calc(2.6rem * var(--type-scale)));
+  line-height: 1.15;
+  font-family: var(--font-display);
+}
+
+.h3,
+.type-lg {
+  font-size: calc(1.375rem * var(--type-scale));
+  line-height: 1.3;
+  font-family: var(--font-display);
+}
+
+.body,
+.type-md {
+  font-size: 1rem;
+  line-height: 1.6;
+  font-family: var(--font-body);
+}
+
+.small,
+.type-sm {
+  font-size: 0.875rem;
+  line-height: 1.6;
+  font-family: var(--font-body);
+}
+
+.kicker {
+  letter-spacing: 0.08em;
+  text-transform: var(--kicker-transform);
+  font-family: var(--font-body);
+}
+
+:where(a[href]),
+:where(button) {
+  transition: opacity var(--dur-quick) var(--ease-standard);
+}
+
+:where(a[href]):hover,
+:where(button):hover {
+  opacity: 0.85;
+}
+
+.prose p {
+  margin: 0 0 var(--space-3);
+}
+
+.prose h2 {
+  margin: var(--space-5) 0 var(--space-3);
+}
+
+.prose ul,
+.prose ol {
+  margin: 0 0 var(--space-4);
+  padding-left: 1.25em;
+}
+
+.prose li + li {
+  margin-top: var(--space-2);
+}
+
+.prose a {
+  color: inherit;
+  text-decoration-color: var(--color-accent-1);
+}
